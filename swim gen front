@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swim Workout Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        header, footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        #user-form, #workout-display, #search-workout {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005f73;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Swim Workout Generator</h1>
+    </header>
+
+    <main>
+        <section id="user-info">
+            <h2>Tell Us About Yourself</h2>
+            <form id="user-form">
+                <label for="experience">Your Swimming Experience:</label>
+                <select id="experience" name="experience">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="professional">Professional</option>
+                </select>
+
+                <label for="goal">Your Training Goal:</label>
+                <select id="goal" name="goal">
+                    <option value="endurance">Endurance</option>
+                    <option value="speed">Speed</option>
+                    <option value="technique">Technique Refinement</option>
+                    <option value="competitive">Competitive Swimming</option>
+                    <option value="fitness">General Fitness</option>
+                    <option value="recovery">Recovery and Rehabilitation</option>
+                </select>
+
+                <button type="submit">Generate Workout</button>
+            </form>
+        </section>
+
+        <section id="workout-display">
+            <h2>Your Custom Workout</h2>
+            <div id="workout-info"></div>
+            <button id="download-pdf">Download as PDF</button>
+        </section>
+
+        <section id="search-workout">
+            <h2>Find a Past Workout</h2>
+            <input type="text" id="search-query" placeholder="Enter Workout Title">
+            <button id="search-button">Search</button>
+            <div id="search-results"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Swim Workout Generator</p>
+    </footer>
+
+    <script>
+        document.getElementById('user-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var experience = document.getElementById('experience').value;
+            var goal = document.getElementById('goal').value;
+
+            // Update this URL with your backend server's endpoint
+            fetch(`https://your-backend-url/get-workout?category=${experience}_${goal}`)
+                .then(response => response.json())
+                .then(workout => {
+                    document.getElementById('workout-info').innerHTML = `
+                        <h3>${workout.title}</h3>
+                        <p><strong>Warm-Up:</strong> ${workout.warmUp}</p>
+                        <p><strong>Main Set:</strong> ${workout.mainSet}</p>
+                        <p><strong>Endurance Set:</strong> ${workout.enduranceSet}</p>
+                        <p><strong>Cool Down:</strong> ${workout.coolDown}</p>
+                        <p><strong>Total Distance:</strong> ${workout.totalDistance}</p>
+                        <p><em>${workout.note}</em></p>
+                    `;
+                })
+                .catch(error => console.error('Error fetching workout:', error));
+        });
+
+        // Additional JavaScript for the download and search functionality
+        // can be added here as needed.
+    </script>
+</body>
+</html>
